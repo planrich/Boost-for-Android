@@ -1,5 +1,5 @@
 boost_*
-build
+build-*
 *~
 logs
 build.log
