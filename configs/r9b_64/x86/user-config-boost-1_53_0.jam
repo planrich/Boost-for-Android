@@ -67,7 +67,7 @@ i686-linux-android-g++
 <compileflags>-O2
 <compileflags>-g
 <compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/include
-<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/libs/armeabi/include
+<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/libs/x86/include
 # @Moss - Above are the 'oficial' android flags
 <architecture>x86
 <compileflags>-fvisibility=hidden
