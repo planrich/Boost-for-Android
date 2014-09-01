@@ -12,7 +12,6 @@ ABI="armeabi"
 LIBRARIES=""
 TOOLCHAIN=""
 NDK_ROOT="${NDK_ROOT:-${NDK_HOME}}"
-CLEAN=no
 PREFIX=""
 OS="${OSTYPE//[0-9.]/}-$(uname -m)"
 
@@ -34,14 +33,13 @@ Usage: $0
   -t TOOLCHAIN                Toolchain to use
   -i LIBRARY                  Include the given library (e.g. filesystem)
   -e LIBRARY                  Exclude the given library (e.g. timer)
-  -c                          Clean up before building.
   -p PREFIX                   Where to build.
   -o OS                       Host OS ($OS)
   -h                          Show help.
 USAGE
 }
 
-while getopts ":a:b:n:t:i:e:cp:o:h?" opt; do
+while getopts ":a:b:n:t:i:e:p:o:h?" opt; do
   case $opt in
     a)
       ABI="$OPTARG"
@@ -60,9 +58,6 @@ while getopts ":a:b:n:t:i:e:cp:o:h?" opt; do
       ;;
     e)
       LIBRARIES="$LIBRARIES --without-$OPTARG"
-      ;;
-    c)
-      CLEAN=yes
       ;;
     p)
       PREFIX="$OPTARG"
