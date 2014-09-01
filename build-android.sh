@@ -127,7 +127,7 @@ if [ ! -d "$TOOLCHAIN_PATH" ]; then
 fi
 
 # Figure out which toolset to use
-BOOST_TOOLSET="gcc-${NDK_ID}_${ABI}"
+BOOST_TOOLSET="gcc-${NDK_ID}_${ABI//-/_}"
 
 # Show selected options
 cat <<EOT
