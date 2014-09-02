@@ -8,6 +8,7 @@ To compile Boost for Android you may use one of the following NDKs:
 | NDK / boost | 1.53 | 1.54 | 1.55 |
 | ----------- | ---- | ---- | ---- |
 | **r9b (64-bit)** from the [official android repository](http://developer.android.com). | ✔︎ | ✔︎ | ✔︎ |
+| **r10 (64-bit)** from the [official android repository](http://developer.android.com). | ✔︎ | ✔︎ | ✔︎ |
 
 # Quick Start
 
