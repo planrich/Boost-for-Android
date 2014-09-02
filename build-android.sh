@@ -6,6 +6,11 @@ portable_realpath() {
     [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
 }
 
+# Turns "r9b (64-bit)" into "r9b_64" so that we can use it in jam files
+normalize_ndk_version() {
+  echo "$1" | tr ' ' _ | tr -d '()' | cut -d - -f 1
+}
+
 # Configurable options
 BOOST_VERSION="1.53.0"
 ABI="armeabi"
@@ -14,6 +19,7 @@ TOOLCHAIN=""
 NDK_ROOT="${NDK_ROOT:-${NDK_HOME}}"
 PREFIX=""
 OS="${OSTYPE//[0-9.]/}-$(uname -m)"
+CONFIG=""
 
 # If environment variables didn't do the trick, attempt to detect if
 # ndk-build is available and see where it is.
@@ -35,11 +41,12 @@ Usage: $0
   -e LIBRARY                  Exclude the given library (e.g. timer)
   -p PREFIX                   Where to build.
   -o OS                       Host OS ($OS)
+  -c CONFIG                   Force specific config to be used (e.g. r9b_64)
   -h                          Show help.
 USAGE
 }
 
-while getopts ":a:b:n:t:i:e:p:o:h?" opt; do
+while getopts ":a:b:n:t:i:e:p:o:c:h?" opt; do
   case $opt in
     a)
       ABI="$OPTARG"
@@ -65,6 +72,9 @@ while getopts ":a:b:n:t:i:e:p:o:h?" opt; do
     o)
       OS="$OPTARG"
       ;;
+    c)
+      CONFIG=$(normalize_ndk_version "$OPTARG")
+      ;;
     h)
       usage
       exit 0
@@ -88,17 +98,25 @@ PREFIX=$(portable_realpath ${PREFIX:-./build-${BOOST_VERSION}/${ABI}})
 # Get NDK version for informative purposes
 RELEASE_PATH="$NDK_ROOT/RELEASE.txt"
 NDK_VERSION=""
-NDK_ID=""
 if [ -f "$RELEASE_PATH" ]; then
   NDK_VERSION=$(<"$RELEASE_PATH")
-  NDK_ID="$(echo $NDK_VERSION | tr ' ' _ | tr -d '()' | cut -d - -f 1)"
 else
   echo "Unsupported NDK version: ${RELEASE_PATH} not available" >&2
   exit 1
 fi
 
+# Check config
+if [ -z "$CONFIG" ]; then
+  CONFIG=$(normalize_ndk_version "$NDK_VERSION")
+fi
+
+if [ ! -d "configs/${CONFIG}" ]; then
+  echo "Unsupported config: ${CONFIG} not available">&2
+  exit 1
+fi
+
 # Check if the boost version is supported
-JAM_PATH="configs/${NDK_ID}/${ABI}/user-config-boost-${BOOST_VERSION_U}.jam"
+JAM_PATH="configs/${CONFIG}/${ABI}/user-config-boost-${BOOST_VERSION_U}.jam"
 if [ ! -f "$JAM_PATH" ]; then
   echo "Unsupported boost version: ${JAM_PATH} not available">&2
   exit 1
@@ -122,10 +140,11 @@ if [ ! -d "$TOOLCHAIN_PATH" ]; then
 fi
 
 # Figure out which toolset to use
-BOOST_TOOLSET="gcc-${NDK_ID}_${ABI//-/_}"
+BOOST_TOOLSET="gcc-${CONFIG}_${ABI//-/_}"
 
 # Show selected options
 cat <<EOT
+Configuration: ${CONFIG}
 Target ABI: ${ABI}
 NDK root: ${NDK_ROOT}
 NDK version: ${NDK_VERSION}
