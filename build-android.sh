@@ -7,6 +7,7 @@ portable_realpath() {
 }
 
 # Turns "r9b (64-bit)" into "r9b_64" so that we can use it in jam files
+# if necessary
 normalize_ndk_version() {
   echo "$1" | tr ' ' _ | tr -d '()' | cut -d - -f 1
 }
@@ -116,7 +117,7 @@ if [ ! -d "configs/${CONFIG}" ]; then
 fi
 
 # Check if the boost version is supported
-JAM_PATH="configs/${CONFIG}/${ABI}/user-config-boost-${BOOST_VERSION_U}.jam"
+JAM_PATH="configs/${CONFIG}/${BOOST_DIR}/user-config-${ABI}.jam"
 if [ ! -f "$JAM_PATH" ]; then
   echo "Unsupported boost version: ${JAM_PATH} not available">&2
   exit 1
@@ -140,7 +141,7 @@ if [ ! -d "$TOOLCHAIN_PATH" ]; then
 fi
 
 # Figure out which toolset to use
-BOOST_TOOLSET="gcc-${CONFIG}_${ABI//-/_}"
+BOOST_TOOLSET="gcc-${ABI//-/_}"
 
 # Show selected options
 cat <<EOT

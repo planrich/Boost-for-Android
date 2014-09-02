@@ -41,7 +41,7 @@ import os ;
 local NDK_ROOT = [ os.environ NDK_ROOT ] ;
 
 # --------------------------------------------------------------------
-using gcc : r9b_64_armeabi
+using gcc : armeabi
 :
 arm-linux-androideabi-g++
 :
