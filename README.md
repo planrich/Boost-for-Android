@@ -31,19 +31,20 @@ To compile Boost for Android you may use one of the following NDKs:
 
 Linux.
 ```
-./build-android.sh $(NDK_ROOT)
+./build-android.sh [-n $NDK_ROOT]
 ```
 Windows:
 ```
-build-android.bat $(NDK_ROOT)
+build-android.bat [-n $NDK_ROOT]
 ```
-NOTE: Do not forget to replace backslash with slashes in $(NDK_ROOT). For example set $(NDK_ROOT) to D:/android-ndk-r8e instead of D:\android-ndk-r8e
-    
+
+NOTE: Do not forget to replace backslash with slashes in `$NDK_ROOT`. For example set `$NDK_ROOT` to D:/android-ndk-r8e instead of D:\android-ndk-r8e
+
 On windows you will need MSYS to be able to launch the corresponding bat files (http://www.mingw.org/wiki/MSYS).
-    
+
 This command will download and build boost against the NDK specified and output the final headers and libs in the `build` folder. Make sure to provide an absolute path the the NDK folder!
 
-For more info about usage and available commands use `--help`.
+For more info about usage and available commands use `-h`.
 
 ### Including
 
@@ -67,7 +68,7 @@ The projects is split into two main branches, the master and devel. The master b
 
 ## Troubleshooting
 
-In case you encounter bunch of linker errors when building your app with boost, 
+In case you encounter bunch of linker errors when building your app with boost,
 this might help:
 
 ### Building from a 64 bit machine (Linux)
@@ -81,7 +82,7 @@ To install them just use the following
 
 ### NDK 7 (CrystaX)
 
-Add `-lgnustl_static` *AFTER* all boost libraries to the LOCAL_LDLIBS line in 
+Add `-lgnustl_static` *AFTER* all boost libraries to the LOCAL_LDLIBS line in
 Android.mk. Example:
 
     LOCAL_LDLIBS += lboost_system-gcc-md lboost_thread-gcc-md -lgnustl_static
