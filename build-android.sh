@@ -94,7 +94,7 @@ BOOST_VERSION_U="$(echo $BOOST_VERSION | tr . _)"
 BOOST_DIR="boost_${BOOST_VERSION_U}"
 BOOST_ARCHIVE="${BOOST_DIR}.tar.bz2"
 BOOST_URL="http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/${BOOST_ARCHIVE}"
-PREFIX=$(portable_realpath ${PREFIX:-./build-${BOOST_VERSION}/${ABI}})
+PREFIX=$(portable_realpath ${PREFIX:-./build_${BOOST_VERSION_U}/${ABI}})
 
 # Get NDK version for informative purposes
 RELEASE_PATH="$NDK_ROOT/RELEASE.txt"
