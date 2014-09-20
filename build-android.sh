@@ -43,11 +43,12 @@ Usage: $0
   -p PREFIX                   Where to build.
   -o OS                       Host OS ($OS)
   -c CONFIG                   Force specific config to be used (e.g. r9b_64)
+  -v VARIANT                  'debug' or 'release'
   -h                          Show help.
 USAGE
 }
 
-while getopts ":a:b:n:t:i:e:p:o:c:h?" opt; do
+while getopts ":a:b:n:t:i:e:p:o:c:v:h?" opt; do
   case $opt in
     a)
       ABI="$OPTARG"
@@ -75,6 +76,9 @@ while getopts ":a:b:n:t:i:e:p:o:c:h?" opt; do
       ;;
     c)
       CONFIG=$(normalize_ndk_version "$OPTARG")
+      ;;
+    v)
+      VARIANT="$OPTARG"
       ;;
     h)
       usage
@@ -198,6 +202,10 @@ export PATH="$TOOLCHAIN_PATH/bin:$PATH"
 export NDK_ROOT
 export NO_BZIP2=1
 
+if [ -n "${EXTRA_OPTIONS}" ]; then
+  echo "Using EXTRA_OPTIONS=$EXTRA_OPTIONS"
+fi
+
 (cd "$BOOST_DIR" && ./bjam -q                      \
   target-os=linux              \
   toolset="${BOOST_TOOLSET}"   \
@@ -206,6 +214,8 @@ export NO_BZIP2=1
   --layout=versioned           \
   --prefix="${PREFIX}"         \
   $LIBRARIES                   \
+  variant=${VARIANT}           \
+  $EXTRA_OPTIONS               \
   install 2>&1 ) | tee -a build.log
 
 echo "=====> Build completed, artifacts available at:"
