@@ -21,6 +21,7 @@ NDK_ROOT="${NDK_ROOT:-${NDK_HOME}}"
 PREFIX=""
 OS="${OSTYPE//[0-9.]/}-$(uname -m)"
 CONFIG=""
+VARIANT=""
 
 # If environment variables didn't do the trick, attempt to detect if
 # ndk-build is available and see where it is.
@@ -78,7 +79,7 @@ while getopts ":a:b:n:t:i:e:p:o:c:v:h?" opt; do
       CONFIG=$(normalize_ndk_version "$OPTARG")
       ;;
     v)
-      VARIANT="$OPTARG"
+      VARIANT="variant=$OPTARG"
       ;;
     h)
       usage
@@ -157,8 +158,10 @@ NDK toolchain: ${TOOLCHAIN} (${TOOLCHAIN_PATH})
 Boost version: ${BOOST_VERSION}
 Boost toolset: ${BOOST_TOOLSET}
 Boost libraries: ${LIBRARIES}
+Boost variant: ${VARIANT:-<default>}
 Build prefix: ${PREFIX}
 Build OS: ${OS}
+Extra options: ${EXTRA_OPTIONS:-<none>}
 EOT
 echo
 
@@ -202,10 +205,6 @@ export PATH="$TOOLCHAIN_PATH/bin:$PATH"
 export NDK_ROOT
 export NO_BZIP2=1
 
-if [ -n "${EXTRA_OPTIONS}" ]; then
-  echo "Using EXTRA_OPTIONS=$EXTRA_OPTIONS"
-fi
-
 (cd "$BOOST_DIR" && ./bjam -q                      \
   target-os=linux              \
   toolset="${BOOST_TOOLSET}"   \
@@ -214,7 +213,7 @@ fi
   --layout=versioned           \
   --prefix="${PREFIX}"         \
   $LIBRARIES                   \
-  variant=${VARIANT}           \
+  $VARIANT                     \
   $EXTRA_OPTIONS               \
   install 2>&1 ) | tee -a build.log
 
