@@ -102,7 +102,7 @@ BOOST_URL="http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}
 PREFIX=$(portable_realpath ${PREFIX:-./build_${BOOST_VERSION_U}/${ABI}})
 
 # Get NDK version for informative purposes
-RELEASE_PATH="$NDK_ROOT/RELEASE.txt"
+RELEASE_PATH="$NDK_ROOT/RELEASE.TXT"
 NDK_VERSION=""
 if [ -f "$RELEASE_PATH" ]; then
   NDK_VERSION=$(<"$RELEASE_PATH")
