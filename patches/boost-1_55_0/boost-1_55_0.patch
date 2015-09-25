@@ -20,9 +20,9 @@ diff -u -r boost_1_55_0/boost/asio/ip/impl/address_v6.ipp boost_1_55_0.patched/b
 @@ -11,6 +11,23 @@
  #ifndef BOOST_ASIO_IP_IMPL_ADDRESS_V6_IPP
  #define BOOST_ASIO_IP_IMPL_ADDRESS_V6_IPP
- 
+
 +// @Moss - Define IPv6 macros
-+#if !defined(IN6_IS_ADDR_MULTICAST) 
++#if !defined(IN6_IS_ADDR_MULTICAST)
 +#define IN6_IS_ADDR_MULTICAST(a) (((__const uint8_t *) (a))[0] == 0xff)
 +#endif
 +
@@ -47,7 +47,7 @@ diff -u -r boost_1_55_0/boost/config/user.hpp boost_1_55_0.patched/boost/config/
 @@ -13,6 +13,14 @@
  //  configuration policy:
  //
- 
+
 +// Android defines
 +#define _REENTRANT 1
 +#define _GLIBCXX__PTHREADS 1
@@ -58,19 +58,19 @@ diff -u -r boost_1_55_0/boost/config/user.hpp boost_1_55_0.patched/boost/config/
 +
  // define this to locate a compiler config file:
  // #define BOOST_COMPILER_CONFIG <myheader>
- 
+
 diff -u -r boost_1_55_0/boost/interprocess/detail/workaround.hpp boost_1_55_0.patched/boost/interprocess/detail/workaround.hpp
 --- boost_1_55_0/boost/interprocess/detail/workaround.hpp	2013-09-16 19:01:45.000000000 +0200
 +++ boost_1_55_0.patched/boost/interprocess/detail/workaround.hpp	2013-11-29 17:51:33.111025389 +0100
 @@ -73,7 +73,7 @@
     #endif
- 
+
     //Check for XSI shared memory objects. They are available in nearly all UNIX platforms
 -   #if !defined(__QNXNTO__)
 +   #if !defined(__QNXNTO__) && !defined(ANDROID) && !defined(__ANDROID__)
        #define BOOST_INTERPROCESS_XSI_SHARED_MEMORY_OBJECTS
     #endif
- 
+
 diff -u -r boost_1_55_0/boost/predef/other/endian.h boost_1_55_0.patched/boost/predef/other/endian.h
 --- boost_1_55_0/boost/predef/other/endian.h
 +++ boost_1_55_0.patched/boost/predef/other/endian.h
@@ -120,6 +120,20 @@ diff -u -r boost_1_55_0/libs/filesystem/src/operations.cpp boost_1_55_0.patched/
 +#else
  #   define BOOST_RESIZE_FILE(P,SZ)(::truncate(P, SZ)== 0)
 +#endif
- 
+
  #   define BOOST_ERROR_NOT_SUPPORTED ENOSYS
  #   define BOOST_ERROR_ALREADY_EXISTS EEXIST
+diff -u -r boost_1_55_0/boost/thread/pthread/thread_data.hpp boost_1_55_0.patched/boost/thread/pthread/thread_data.hpp
+--- boost_1_55_0/boost/thread/pthread/thread_data.hpp
++++ boost_1_55_0.patched/boost/thread/pthread/thread_data.hpp
+@@ -25,10 +25,6 @@
+ #include <vector>
+ #include <utility>
+
+-#if defined(__ANDROID__)
+-#include <asm/page.h> // http://code.google.com/p/android/issues/detail?id=39983
+-#endif
+-
+ #include <pthread.h>
+ #include <unistd.h>
+
