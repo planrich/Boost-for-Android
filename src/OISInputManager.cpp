@@ -32,6 +32,8 @@ restrictions:
 #  include "SDL/SDLInputManager.h"
 #elif defined OIS_WIN32_PLATFORM
 #  include "win32/Win32InputManager.h"
+#elif defined OIS_ANDROID_PLATFORM
+// pass
 #elif defined OIS_LINUX_PLATFORM
 #  include "linux/LinuxInputManager.h"
 #elif defined OIS_APPLE_PLATFORM
@@ -111,6 +113,8 @@ InputManager* InputManager::createInputSystem( ParamList &paramList )
 	im = new Win32InputManager();
 #elif defined OIS_XBOX_PLATFORM
 	im = new XBoxInputManager();
+#elif defined OIS_ANDROID_PLATFORM
+    im = NULL;
 #elif defined OIS_LINUX_PLATFORM
 	im = new LinuxInputManager();
 #elif defined OIS_APPLE_PLATFORM

@@ -23,6 +23,9 @@
 #include "resource.h"
 LRESULT DlgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 //////////////////////////////////////////////////////////////////////
+#elif defined OIS_ANDROID_PLATFORM
+// none yet
+//////////////////////////////////////////////////////////////////////
 ////////////////////////////////////Needed Linux Headers//////////////
 #elif defined OIS_LINUX_PLATFORM
 #include <X11/Xlib.h>
@@ -57,6 +60,8 @@ JoyStick* g_joys[4] = {0,0,0,0};	//This demo supports up to 4 controllers
 //-- OS Specific Globals --//
 #if defined OIS_WIN32_PLATFORM
   HWND hWnd = 0;
+#elif defined OIS_ANDROID_PLATFORM
+  // pass
 #elif defined OIS_LINUX_PLATFORM
   Display *xDisp = 0;
   Window xWin = 0;
@@ -173,6 +178,8 @@ int main()
 				TranslateMessage( &msg );
 				DispatchMessage( &msg );
 			  }
+            #elif defined OIS_ANDROID_PLATFORM
+              // none
 			#elif defined OIS_LINUX_PLATFORM
 			  checkX11Events();
 			  usleep( 500 );

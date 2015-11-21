@@ -43,7 +43,11 @@ set(ois_source
     "${CMAKE_SOURCE_DIR}/src/OISException.cpp"
 )
 
-if (UNIX AND NOT APPLE)
+if (ANDROID)
+    ADD_DEFINITIONS(-DOIS_ANDROID_PLATFORM)
+endif ()
+
+if (UNIX AND NOT APPLE AND NOT ANDROID)
 
     find_package(X11 REQUIRED)
     include_directories(SYSTEM ${X11_INCLUDE_DIR})
@@ -99,7 +103,11 @@ if (APPLE)
 endif()
 
 source_group("OIS" FILES ${ois_source})
-add_library(OIS ${ois_source})
+if (OIS_BUILD_STATIC)
+    add_library(OIS STATIC ${ois_source})
+else ()
+    add_library(OIS ${ois_source})
+endif ()
 set_target_properties(OIS PROPERTIES SOLUTION_FOLDER "libOIS")
 
 if (APPLE)
@@ -109,7 +117,7 @@ if (APPLE)
 endif()
 
 
-if(UNIX)
+if(UNIX AND NOT ANDROID)
 
     if (NOT APPLE)
         add_dependencies(OIS X11)
