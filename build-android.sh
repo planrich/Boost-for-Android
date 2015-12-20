@@ -420,7 +420,7 @@ echo "Building boost for android"
          $cxxflags                    \
          link=static                  \
          threading=multi              \
-         --layout=versioned           \
+         --layout=system              \
          -sICONV_PATH=`pwd`/../libiconv-libicu-android/armeabi \
          -sICU_PATH=`pwd`/../libiconv-libicu-android/armeabi \
          --prefix="./../$BUILD_DIR/"  \
