@@ -6,3 +6,5 @@ build.log
 *.swp
 *.vim
 includes/OISPrereqs.h
+
+build-*/
